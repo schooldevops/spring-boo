@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  mongo1:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data1:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin1234
+    networks:
+      - mongo-cluster-net
+
+  mongo2:
+    image: mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./data2:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin1234
+    networks:
+      - mongo-cluster-net
+
+  mongo3:
+    image: mongo
+    ports:
+      - "27019:27017"
+    volumes:
+      - ./data3:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin1234
+    networks:
+      - mongo-cluster-net
+
+  mongo-init:
+    image: mongo
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin1234
+    volumes:
+      - ./init.js:/docker-entrypoint-initdb.d/init.js
+    networks:
+      - mongo-cluster-net
+
+networks:
+  mongo-cluster-net:
+    driver: bridge
