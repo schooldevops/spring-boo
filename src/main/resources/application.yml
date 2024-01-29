@@ -1,0 +1,13 @@
+
+server:
+  port: 8099
+spring:
+  data:
+    mongodb:
+      uri: mongodb://admin:admin1234@localhost:27017/project?authSource=admin
+      replica-set-name: rs0
+      repositories:
+        type: auto
+      ssl:
+        enabled: false
+      authentication-database: admin

@@ -1,0 +1,14 @@
+### Save Project
+POST http://localhost:8099/v1/projects
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "ProjectA",
+  "code": "A",
+  "description": "Project A Description",
+  "startDate": "2023-01-01",
+  "endDate": "2023-10-01",
+  "estimatedCost": 1000,
+  "countryList": ["UK", "USA", "KOREA", "JAPAN"]
+}
