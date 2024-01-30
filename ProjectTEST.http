@@ -12,3 +12,17 @@ Content-Type: application/json
   "estimatedCost": 1000,
   "countryList": ["UK", "USA", "KOREA", "JAPAN"]
 }
+
+### Save Task
+POST http://localhost:8099/v1/tasks
+Content-Type: application/json
+
+{
+  "id": "1",
+  "projectId": "1",
+  "name": "Solve Math",
+  "description": "Solve Math in time",
+  "ownername": "KIDO",
+  "cost": 3000
+
+}
