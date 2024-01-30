@@ -26,3 +26,12 @@ Content-Type: application/json
   "cost": 3000
 
 }
+
+### GET Project
+GET http://localhost:8099/v1/projects?id=1
+
+### GET Task
+GET http://localhost:8099/v1/tasks?id=1
+
+### Delete Task
+DELETE http://localhost:8099/v1/tasks/1

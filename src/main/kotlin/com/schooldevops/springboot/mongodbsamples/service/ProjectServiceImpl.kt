@@ -5,6 +5,7 @@ import com.schooldevops.springboot.mongodbsamples.model.Task
 import com.schooldevops.springboot.mongodbsamples.repository.ProjectRepository
 import com.schooldevops.springboot.mongodbsamples.repository.TaskRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,5 +20,21 @@ class ProjectServiceImpl(
 
     override fun saveTask(t: Task) {
         taskRepository.save(t)
+    }
+
+    override fun findTask(id: String): Task? {
+        return taskRepository.findById(id).orElseThrow { NotFoundException() }
+    }
+
+    override fun findProject(id: String): Project? {
+        return projectRepository.findById(id).orElseThrow() { NotFoundException() }
+    }
+
+    override fun deleteTask(id: String) {
+        taskRepository.deleteById(id)
+    }
+
+    override fun deleteProject(id: String) {
+        projectRepository.deleteById(id)
     }
 }
