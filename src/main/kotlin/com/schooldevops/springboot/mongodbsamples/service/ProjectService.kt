@@ -10,4 +10,5 @@ interface ProjectService {
     fun findProject(id: String): Project?
     fun deleteTask(id: String)
     fun deleteProject(id: String)
+    fun updateProject(p: Project)
 }

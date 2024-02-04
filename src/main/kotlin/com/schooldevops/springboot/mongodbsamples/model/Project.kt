@@ -14,5 +14,6 @@ class Project (
     @Field("cost") var estimatedCost: Long,
     var countryList: List<String>
 ) {
+    // optimistic lock을 위해 버변을 걸어준다.
     @Version var version: Long = 0
 }

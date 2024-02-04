@@ -37,4 +37,11 @@ class ProjectServiceImpl(
     override fun deleteProject(id: String) {
         projectRepository.deleteById(id)
     }
+
+    /**
+     * version에 따라 optimistics lock이 걸린다.
+     */
+    override fun updateProject(p: Project) {
+        projectRepository.save(p);
+    }
 }

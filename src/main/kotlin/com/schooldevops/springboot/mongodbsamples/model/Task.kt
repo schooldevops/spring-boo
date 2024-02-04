@@ -12,5 +12,6 @@ class Task(
     var ownername: String,
     var cost: Long
 ) {
+    // optimistic lock을 위해 버변을 걸어준다.
     @Version var version: Long = 0
 }
