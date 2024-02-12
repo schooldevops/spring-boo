@@ -42,6 +42,30 @@ class ProjectServiceImpl(
      * version에 따라 optimistics lock이 걸린다.
      */
     override fun updateProject(p: Project) {
-        projectRepository.save(p);
+        projectRepository.save(p)
+    }
+
+    override fun findByName(name: String): List<Project> {
+        return projectRepository.findByName(name)
+    }
+
+    override fun findByNameNot(name: String): List<Project> {
+        return projectRepository.findByNameNot(name)
+    }
+
+    override fun findByEstimatedCostGreaterThan(cost: Long): List<Project> {
+        return projectRepository.findByEstimatedCostGreaterThan(cost)
+    }
+
+    override fun findByEstimatedCostBetween(from: Long, to: Long): List<Project> {
+        return projectRepository.findByEstimatedCostBetween(from, to)
+    }
+
+    override fun findByNameLike(name: String): List<Project> {
+        return projectRepository.findByNameLike(name)
+    }
+
+    override fun findByNameRegex(name: String): List<Project> {
+        return projectRepository.findByNameRegex(name)
     }
 }

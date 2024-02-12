@@ -11,4 +11,11 @@ interface ProjectService {
     fun deleteTask(id: String)
     fun deleteProject(id: String)
     fun updateProject(p: Project)
+
+    fun findByName(name: String): List<Project>
+    fun findByNameNot(name: String): List<Project>
+    fun findByEstimatedCostGreaterThan(cost: Long): List<Project>
+    fun findByEstimatedCostBetween(from: Long, to: Long): List<Project>
+    fun findByNameLike(name: String): List<Project>
+    fun findByNameRegex(name: String): List<Project>
 }
