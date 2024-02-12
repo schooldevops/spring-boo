@@ -7,12 +7,17 @@ import com.schooldevops.springboot.mongodbsamples.repository.TaskRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.data.domain.Sort
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
 
 @Service
 class ProjectServiceImpl(
     @Autowired val projectRepository: ProjectRepository,
-    @Autowired val taskRepository: TaskRepository
+    @Autowired val taskRepository: TaskRepository,
+    @Autowired val mongoTemplate: MongoTemplate
 ): ProjectService {
 
     override fun saveProject(p: Project) {
@@ -84,5 +89,38 @@ class ProjectServiceImpl(
 
     override fun findByNameRegexQuery(regex: String): List<Project> {
         return projectRepository.findByNameRegexQuery(regex)
+    }
+
+    override fun findProjectByNameQueryWithTemplate(name: String): List<Project> {
+        var query = Query()
+        query.addCriteria(Criteria.where("name").`is`(name))
+        return mongoTemplate.find(query, Project::class.java)
+    }
+
+    override fun findByEstimatedCostBetweenQueryWithTemplate(from: Long, to: Long): List<Project> {
+        val query = Query()
+        query.with(Sort.by(Sort.Direction.ASC, "cost"))
+        query.addCriteria(Criteria.where("cost").gt(from))
+        return mongoTemplate.find(query, Project::class.java)
+    }
+
+    override fun findByNameRegexQueryWithTemplate(regexp: String): List<Project> {
+        val query = Query()
+        query.addCriteria(Criteria.where("name").regex(regexp))
+        return mongoTemplate.find(query, Project::class.java)
+    }
+
+    override fun upsertCostWithCriteriaTemplate(id: String, cost: Long) {
+        val query = Query()
+        query.addCriteria(Criteria.where("id").`is`(id))
+        val update = Update()
+        update.set("cost", cost)
+        mongoTemplate.upsert(query, update, Project::class.java)
+    }
+
+    override fun deleteWithCriteriaTemplate(id: String) {
+        val query = Query()
+        query.addCriteria(Criteria.where("id").`is`(id))
+        mongoTemplate.remove(query, Project::class.java)
     }
 }

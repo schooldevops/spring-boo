@@ -62,3 +62,18 @@ GET http://localhost:8099/v1/projects/findByEstimatedCostBetweenQuery?from=100&t
 
 ### GET /projects/findByNameRegexQuery
 GET http://localhost:8099/v1/projects/findByNameRegexQuery?name=Proje
+
+### @GetMapping("/projects/findProjectByNameQueryWithTemplate")
+GET http://localhost:8099/v1/projects/findProjectByNameQueryWithTemplate?name=ProjectA
+
+### @GetMapping("/projects/findByEstimatedCostBetweenQueryWithTemplate")
+GET http://localhost:8099/v1/projects/findByEstimatedCostBetweenQueryWithTemplate?from=100&to=2000
+
+### @GetMapping("/projects/findByNameRegexQueryWithTemplate")
+GET http://localhost:8099/v1/projects/findByNameRegexQueryWithTemplate?name=Project
+
+### @GetMapping("/projects/upsertCostWithCriteriaTemplate/{id}/{cost}")
+GET http://localhost:8099/v1/projects/upsertCostWithCriteriaTemplate/1/1900
+
+### @GetMapping("/projects/deleteWithCriteriaTemplate/{id}")
+GET http://localhost:8099/v1/projects/deleteWithCriteriaTemplate/1

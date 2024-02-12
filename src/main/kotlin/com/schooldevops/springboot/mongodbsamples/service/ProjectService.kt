@@ -26,4 +26,10 @@ interface ProjectService {
     fun findProjectNameAndCostQuery(name: String, cost: Long): List<Project>
     fun findByEstimatedCostBetweenQuery(from: Long, to: Long): List<Project>
     fun findByNameRegexQuery(regex: String): List<Project>
+
+    fun findProjectByNameQueryWithTemplate(name: String): List<Project>
+    fun findByEstimatedCostBetweenQueryWithTemplate(from: Long, to: Long): List<Project>
+    fun findByNameRegexQueryWithTemplate(regexp: String): List<Project>
+    fun upsertCostWithCriteriaTemplate(id: String, cost: Long)
+    fun deleteWithCriteriaTemplate(id: String)
 }

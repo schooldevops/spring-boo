@@ -98,4 +98,31 @@ class ProjectController(
         var regEx = "^$name"
         return ResponseEntity.status(HttpStatus.OK).body(projectService.findByNameRegexQuery(regEx))
     }
+
+    @GetMapping("/projects/findProjectByNameQueryWithTemplate")
+    fun findProjectByNameQueryWithTemplate(@RequestParam name: String): ResponseEntity<List<Project>> {
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.findProjectByNameQueryWithTemplate(name))
+    }
+
+    @GetMapping("/projects/findByEstimatedCostBetweenQueryWithTemplate")
+    fun findByEstimatedCostBetweenQueryWithTemplate(@RequestParam from: Long, @RequestParam to: Long): ResponseEntity<List<Project>> {
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.findByEstimatedCostBetweenQueryWithTemplate(from, to))
+    }
+
+    @GetMapping("/projects/findByNameRegexQueryWithTemplate")
+    fun findByNameRegexQueryWithTemplate(@RequestParam name: String): ResponseEntity<List<Project>> {
+        var regex = "^$name"
+        return ResponseEntity.ok(projectService.findByNameRegexQueryWithTemplate(regex))
+    }
+
+    @GetMapping("/projects/upsertCostWithCriteriaTemplate/{id}/{cost}")
+    fun upsertCostWithCriteriaTemplate(@PathVariable id: String, @PathVariable cost: Long) {
+        projectService.upsertCostWithCriteriaTemplate(id, cost)
+    }
+
+    @GetMapping("/projects/deleteWithCriteriaTemplate/{id}")
+    fun deleteWithCriteriaTemplate(@PathVariable id: String) {
+        projectService.deleteWithCriteriaTemplate(id)
+    }
+
 }
