@@ -1,9 +1,6 @@
 package com.schooldevops.springboot.mongodbsamples.service
 
-import com.schooldevops.springboot.mongodbsamples.model.Project
-import com.schooldevops.springboot.mongodbsamples.model.ResultByStartDateAndCost
-import com.schooldevops.springboot.mongodbsamples.model.ResultCount
-import com.schooldevops.springboot.mongodbsamples.model.Task
+import com.schooldevops.springboot.mongodbsamples.model.*
 import com.schooldevops.springboot.mongodbsamples.repository.ProjectRepository
 import com.schooldevops.springboot.mongodbsamples.repository.TaskRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,6 +8,7 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
+import org.springframework.data.mongodb.core.aggregation.LookupOperation
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
@@ -150,5 +148,21 @@ class ProjectServiceImpl(
         val aggregation = Aggregation.newAggregation(match, groupOperation, sort)
         val output = mongoTemplate.aggregate(aggregation, "project", ResultByStartDateAndCost::class.java)
         return output.mappedResults;
+    }
+
+    override fun findAllProjectTasks(): List<ResultProjectTasks> {
+        val lookupOperation = LookupOperation.newLookup()
+            .from("task")
+            .localField("_id")
+            .foreignField("pid")
+            .`as`("ProjectTasks")
+        val unwind = Aggregation.unwind("ProjectTasks")
+        val projectionOperation = Aggregation.project().andExpression("_id").`as`("_id")
+            .andExpression("name").`as`("name")
+            .andExpression("ProjectTasks.name").`as`("taskName")
+            .andExpression("ProjectTasks.ownername").`as`("taskOwnerName")
+        val aggregation = Aggregation.newAggregation(lookupOperation, unwind, projectionOperation)
+        return mongoTemplate.aggregate(aggregation, "project", ResultProjectTasks::class.java).mappedResults
+
     }
 }

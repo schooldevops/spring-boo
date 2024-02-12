@@ -2,6 +2,7 @@ package com.schooldevops.springboot.mongodbsamples.service
 
 import com.schooldevops.springboot.mongodbsamples.model.Project
 import com.schooldevops.springboot.mongodbsamples.model.ResultByStartDateAndCost
+import com.schooldevops.springboot.mongodbsamples.model.ResultProjectTasks
 import com.schooldevops.springboot.mongodbsamples.model.Task
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.repository.Query
@@ -36,4 +37,6 @@ interface ProjectService {
 
     fun findNoOfProjectsCostGreaterThan(cost: Long): Long
     fun findCostsGroupByStartDateForProjectsCostGreaterThan(cost: Long): List<ResultByStartDateAndCost>
+
+    fun findAllProjectTasks(): List<ResultProjectTasks>
 }

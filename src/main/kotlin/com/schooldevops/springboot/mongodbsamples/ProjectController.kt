@@ -2,6 +2,7 @@ package com.schooldevops.springboot.mongodbsamples
 
 import com.schooldevops.springboot.mongodbsamples.model.Project
 import com.schooldevops.springboot.mongodbsamples.model.ResultByStartDateAndCost
+import com.schooldevops.springboot.mongodbsamples.model.ResultProjectTasks
 import com.schooldevops.springboot.mongodbsamples.model.Task
 import com.schooldevops.springboot.mongodbsamples.service.ProjectService
 import org.springframework.beans.factory.annotation.Autowired
@@ -134,6 +135,11 @@ class ProjectController(
     @GetMapping("/projects/findCostsGroupByStartDateForProjectsCostGreaterThan")
     fun findCostsGroupByStartDateForProjectsCostGreaterThan(@RequestParam cost: Long): ResponseEntity<List<ResultByStartDateAndCost>> {
         return ResponseEntity.ok(projectService.findCostsGroupByStartDateForProjectsCostGreaterThan(cost))
+    }
+
+    @GetMapping("/projects/findAllProjectTasks")
+    fun findAllProjectTasks(): ResponseEntity<List<ResultProjectTasks>> {
+        return ResponseEntity.ok(projectService.findAllProjectTasks())
     }
 
 }

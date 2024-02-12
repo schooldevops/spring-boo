@@ -83,3 +83,6 @@ GET http://localhost:8099/v1/projects/findNoOfProjectsCostGreaterThan?cost=1000
 
 ### @GetMapping("/projects/findCostsGroupByStartDateForProjectsCostGreaterThan")
 GET http://localhost:8099/v1/projects/findCostsGroupByStartDateForProjectsCostGreaterThan?cost=1000
+
+### @GetMapping("/projects/findAllProjectTasks")
+GET http://localhost:8099/v1/projects/findAllProjectTasks
