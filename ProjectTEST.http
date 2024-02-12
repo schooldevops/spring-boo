@@ -77,3 +77,9 @@ GET http://localhost:8099/v1/projects/upsertCostWithCriteriaTemplate/1/1900
 
 ### @GetMapping("/projects/deleteWithCriteriaTemplate/{id}")
 GET http://localhost:8099/v1/projects/deleteWithCriteriaTemplate/1
+
+### @GetMapping("/projects/findNoOfProjectsCostGreaterThan")
+GET http://localhost:8099/v1/projects/findNoOfProjectsCostGreaterThan?cost=1000
+
+### @GetMapping("/projects/findCostsGroupByStartDateForProjectsCostGreaterThan")
+GET http://localhost:8099/v1/projects/findCostsGroupByStartDateForProjectsCostGreaterThan?cost=1000

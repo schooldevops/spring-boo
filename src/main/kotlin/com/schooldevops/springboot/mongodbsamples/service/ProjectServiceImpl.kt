@@ -1,6 +1,8 @@
 package com.schooldevops.springboot.mongodbsamples.service
 
 import com.schooldevops.springboot.mongodbsamples.model.Project
+import com.schooldevops.springboot.mongodbsamples.model.ResultByStartDateAndCost
+import com.schooldevops.springboot.mongodbsamples.model.ResultCount
 import com.schooldevops.springboot.mongodbsamples.model.Task
 import com.schooldevops.springboot.mongodbsamples.repository.ProjectRepository
 import com.schooldevops.springboot.mongodbsamples.repository.TaskRepository
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
@@ -122,5 +125,30 @@ class ProjectServiceImpl(
         val query = Query()
         query.addCriteria(Criteria.where("id").`is`(id))
         mongoTemplate.remove(query, Project::class.java)
+    }
+
+    override fun findNoOfProjectsCostGreaterThan(cost: Long): Long {
+        val match = Aggregation.match(Criteria("cost").gt(cost))
+        val countOperation = Aggregation.count().`as`("costly_projects")
+
+        val aggre = Aggregation.newAggregation(match, countOperation)
+        val output = mongoTemplate.aggregate(aggre, "project", ResultCount::class.java)
+
+        if (output.mappedResults.size > 0) {
+            return output.mappedResults.get(0).costly_projects
+        }
+
+        return 0;
+
+    }
+
+    override fun findCostsGroupByStartDateForProjectsCostGreaterThan(cost: Long): List<ResultByStartDateAndCost> {
+        val match = Aggregation.match(Criteria("cost").gt(cost))
+        val groupOperation = Aggregation.group("startDate").sum("cost").`as`("total")
+        val sort = Aggregation.sort(Sort.by(Sort.Direction.DESC, "total"))
+
+        val aggregation = Aggregation.newAggregation(match, groupOperation, sort)
+        val output = mongoTemplate.aggregate(aggregation, "project", ResultByStartDateAndCost::class.java)
+        return output.mappedResults;
     }
 }

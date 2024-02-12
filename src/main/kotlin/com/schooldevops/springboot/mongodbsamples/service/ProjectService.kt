@@ -1,6 +1,7 @@
 package com.schooldevops.springboot.mongodbsamples.service
 
 import com.schooldevops.springboot.mongodbsamples.model.Project
+import com.schooldevops.springboot.mongodbsamples.model.ResultByStartDateAndCost
 import com.schooldevops.springboot.mongodbsamples.model.Task
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.repository.Query
@@ -32,4 +33,7 @@ interface ProjectService {
     fun findByNameRegexQueryWithTemplate(regexp: String): List<Project>
     fun upsertCostWithCriteriaTemplate(id: String, cost: Long)
     fun deleteWithCriteriaTemplate(id: String)
+
+    fun findNoOfProjectsCostGreaterThan(cost: Long): Long
+    fun findCostsGroupByStartDateForProjectsCostGreaterThan(cost: Long): List<ResultByStartDateAndCost>
 }
