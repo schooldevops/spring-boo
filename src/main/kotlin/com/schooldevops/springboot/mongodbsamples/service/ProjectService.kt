@@ -2,6 +2,8 @@ package com.schooldevops.springboot.mongodbsamples.service
 
 import com.schooldevops.springboot.mongodbsamples.model.Project
 import com.schooldevops.springboot.mongodbsamples.model.Task
+import org.springframework.data.domain.Sort
+import org.springframework.data.mongodb.repository.Query
 
 interface ProjectService {
     fun saveProject(p: Project): Unit
@@ -18,4 +20,10 @@ interface ProjectService {
     fun findByEstimatedCostBetween(from: Long, to: Long): List<Project>
     fun findByNameLike(name: String): List<Project>
     fun findByNameRegex(name: String): List<Project>
+
+
+    fun findProjectByNameQuery(name: String): List<Project>
+    fun findProjectNameAndCostQuery(name: String, cost: Long): List<Project>
+    fun findByEstimatedCostBetweenQuery(from: Long, to: Long): List<Project>
+    fun findByNameRegexQuery(regex: String): List<Project>
 }

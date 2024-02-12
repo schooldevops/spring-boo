@@ -6,6 +6,7 @@ import com.schooldevops.springboot.mongodbsamples.repository.ProjectRepository
 import com.schooldevops.springboot.mongodbsamples.repository.TaskRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 
 @Service
@@ -67,5 +68,21 @@ class ProjectServiceImpl(
 
     override fun findByNameRegex(name: String): List<Project> {
         return projectRepository.findByNameRegex(name)
+    }
+
+    override fun findProjectByNameQuery(name: String): List<Project> {
+        return projectRepository.findProjectByNameQuery(name)
+    }
+
+    override fun findProjectNameAndCostQuery(name: String, cost: Long): List<Project> {
+        return projectRepository.findProjectNameAndCostQuery(name, cost)
+    }
+
+    override fun findByEstimatedCostBetweenQuery(from: Long, to: Long): List<Project> {
+        return projectRepository.findByEstimatedCostBetweenQuery(from, to, Sort.by(Sort.Direction.DESC, "cost"))
+    }
+
+    override fun findByNameRegexQuery(regex: String): List<Project> {
+        return projectRepository.findByNameRegexQuery(regex)
     }
 }

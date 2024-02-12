@@ -78,4 +78,24 @@ class ProjectController(
         return ResponseEntity.status(HttpStatus.OK).body(projectService.findByNameRegex(regEx))
     }
 
+    @GetMapping("/projects/findProjectByNameQuery")
+    fun findProjectByNameQuery(@RequestParam name: String): ResponseEntity<List<Project>> {
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.findProjectByNameQuery(name))
+    }
+
+    @GetMapping("/projects/findProjectNameAndCostQuery")
+    fun findProjectNameAndCostQuery(@RequestParam name: String, @RequestParam cost: Long): ResponseEntity<List<Project>> {
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.findProjectNameAndCostQuery(name, cost))
+    }
+
+    @GetMapping("/projects/findByEstimatedCostBetweenQuery")
+    fun findByEstimatedCostBetweenQuery(@RequestParam from: Long, @RequestParam to: Long): ResponseEntity<List<Project>> {
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.findByEstimatedCostBetweenQuery(from, to))
+    }
+
+    @GetMapping("/projects/findByNameRegexQuery")
+    fun findByNameRegexQuery(@RequestParam name: String): ResponseEntity<List<Project>> {
+        var regEx = "^$name"
+        return ResponseEntity.status(HttpStatus.OK).body(projectService.findByNameRegexQuery(regEx))
+    }
 }

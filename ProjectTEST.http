@@ -50,3 +50,15 @@ GET http://localhost:8099/v1/projects/findByNameLike?name=Projec
 
 ### GET /projects/findByNameRegex
 GET http://localhost:8099/v1/projects/findByNameRegex?name=Pro
+
+### GET /projects/findProjectByNameQuery
+GET http://localhost:8099/v1/projects/findProjectByNameQuery?name=ProjectA
+
+### GET /projects/findProjectNameAndCostQuery
+GET http://localhost:8099/v1/projects/findProjectNameAndCostQuery?name=ProjectA&cost=1000
+
+### GET /projects/findByEstimatedCostBetweenQuery
+GET http://localhost:8099/v1/projects/findByEstimatedCostBetweenQuery?from=100&to=2000
+
+### GET /projects/findByNameRegexQuery
+GET http://localhost:8099/v1/projects/findByNameRegexQuery?name=Proje
