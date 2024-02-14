@@ -2,10 +2,16 @@ package com.schooldevops.springboot.mongodbsamples.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Version
+import org.springframework.data.mongodb.core.index.CompoundIndex
+import org.springframework.data.mongodb.core.index.IndexDirection
+import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Field
 
+
+@CompoundIndex(name = "namecostindex", def="{'name': 1, 'cost': 1}")
 class Project (
     @Id var id: String,
+    @Indexed(name = "nameindex", direction= IndexDirection.ASCENDING)
     var name: String,
     var code: String?,
     @Field("desc") var description: String?,
