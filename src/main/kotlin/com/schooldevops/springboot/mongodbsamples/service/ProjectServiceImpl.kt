@@ -9,9 +9,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.LookupOperation
-import org.springframework.data.mongodb.core.query.Criteria
-import org.springframework.data.mongodb.core.query.Query
-import org.springframework.data.mongodb.core.query.Update
+import org.springframework.data.mongodb.core.query.*
 import org.springframework.stereotype.Service
 
 @Service
@@ -164,5 +162,23 @@ class ProjectServiceImpl(
         val aggregation = Aggregation.newAggregation(lookupOperation, unwind, projectionOperation)
         return mongoTemplate.aggregate(aggregation, "project", ResultProjectTasks::class.java).mappedResults
 
+    }
+
+    override fun findNameDescriptionForMatchingTerm(term: String): List<Project> {
+        val query = TextQuery.queryText(TextCriteria.forDefaultLanguage().matching(term))
+            .sortByScore().with(Sort.by(Sort.Direction.DESC, "score"))
+        return mongoTemplate.find(query, Project::class.java)
+    }
+
+    override fun findNameDescriptionForMatchingAny(vararg words: String): List<Project> {
+        val query = TextQuery.queryText(TextCriteria.forDefaultLanguage().matchingAny(*words))
+            .sortByScore().with(Sort.by(Sort.Direction.DESC, "score"))
+        return mongoTemplate.find(query, Project::class.java)
+    }
+
+    override fun findNameDescriptionForMatchingPhrase(phrase: String): List<Project> {
+        val query = TextQuery.queryText(TextCriteria.forDefaultLanguage().matchingPhrase(phrase))
+            .sortByScore().with(Sort.by(Sort.Direction.DESC, "score"))
+        return mongoTemplate.find(query, Project::class.java)
     }
 }

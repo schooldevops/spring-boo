@@ -37,6 +37,9 @@ interface ProjectService {
 
     fun findNoOfProjectsCostGreaterThan(cost: Long): Long
     fun findCostsGroupByStartDateForProjectsCostGreaterThan(cost: Long): List<ResultByStartDateAndCost>
-
     fun findAllProjectTasks(): List<ResultProjectTasks>
+
+    fun findNameDescriptionForMatchingTerm(term: String): List<Project>
+    fun findNameDescriptionForMatchingAny(vararg words: String): List<Project>
+    fun findNameDescriptionForMatchingPhrase(phrase: String): List<Project>
 }

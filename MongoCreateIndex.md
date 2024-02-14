@@ -23,3 +23,14 @@ db.project.createIndex(
     {name: "namecostindex"}
 )
 ```
+
+## FullTextSearch 용 인덱스 생성하기 
+
+```mongodb-json
+use project
+
+db.project.createIndex(
+    { name: "text", desc: "text" },
+    { name: "namedesctextindex" }
+)
+```

@@ -86,3 +86,13 @@ GET http://localhost:8099/v1/projects/findCostsGroupByStartDateForProjectsCostGr
 
 ### @GetMapping("/projects/findAllProjectTasks")
 GET http://localhost:8099/v1/projects/findAllProjectTasks
+
+
+### @GetMapping("/projects/findNameDescriptionForMatchingTerm")
+GET http://localhost:8099/v1/projects/findNameDescriptionForMatchingTerm?name=Proj
+
+### @GetMapping("/projects/findNameDescriptionForMatchingAny")
+GET http://localhost:8099/v1/projects/findNameDescriptionForMatchingAny?words=Pro,Proj,Project
+
+### @GetMapping("/projects/findNameDescriptionForMatchingPhrase")
+GET http://localhost:8099/v1/projects/findNameDescriptionForMatchingPhrase?pharase=Project A Descr

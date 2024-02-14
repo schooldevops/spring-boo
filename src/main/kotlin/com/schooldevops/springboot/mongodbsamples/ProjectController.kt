@@ -142,4 +142,19 @@ class ProjectController(
         return ResponseEntity.ok(projectService.findAllProjectTasks())
     }
 
+    @GetMapping("/projects/findNameDescriptionForMatchingTerm")
+    fun findNameDescriptionForMatchingTerm(@RequestParam term: String): ResponseEntity<List<Project>> {
+        return ResponseEntity.ok(projectService.findNameDescriptionForMatchingTerm(term))
+    }
+
+    @GetMapping("/projects/findNameDescriptionForMatchingAny")
+    fun findNameDescriptionForMatchingAny(@RequestParam words: List<String>): ResponseEntity<List<Project>> {
+        val arr = words.toTypedArray()
+        return ResponseEntity.ok(projectService.findNameDescriptionForMatchingAny(*arr))
+    }
+
+    @GetMapping("/projects/findNameDescriptionForMatchingPhrase")
+    fun findNameDescriptionForMatchingPhrase(@RequestParam pharase: String): ResponseEntity<List<Project>>{
+        return ResponseEntity.ok(projectService.findNameDescriptionForMatchingPhrase(pharase))
+    }
 }
