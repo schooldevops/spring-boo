@@ -162,7 +162,7 @@ class ProjectController(
     fun saveProjectAndTask(): Unit {
         var list = listOf("UK", "India");
         val project = Project(
-            id = "999999",
+            id = "999998",
             code = "D",
             countryList = list,
             description = "ProjectDDecription",
@@ -174,15 +174,46 @@ class ProjectController(
         )
 
         val task = Task(
-            id = "999999",
+            id = "999998",
             cost = 3000,
             description = "TaskDescription",
             name = "TaskK",
             ownername = "Tom",
-            projectId = "999999"
+            projectId = "999998"
         )
 
         projectService.saveProjectAndTask(project, task)
+    }
+
+
+    @PostMapping("/projects/saveToGrid")
+    fun saveToGrid(): Unit {
+        var list = listOf("UK", "India");
+        val project = Project(
+            id = "999999",
+            code = "D",
+            countryList = list,
+            description = "ProjectDDecription",
+            startDate = "2020-01-01",
+            endDate = "2021-01-01",
+            estimatedCost = 5000,
+            name = "ProjectD",
+            score = 50.0f
+        )
+
+        projectService.chunkAndSaveProject(project)
+    }
+
+    @GetMapping("/projects/loadFromGrid")
+    fun loadFromGrid(): ResponseEntity<Project> {
+        val id = "999999"
+
+        return ResponseEntity.ok(projectService.loadProjectFromGrid(id))
+    }
+
+    @DeleteMapping("/projects/deleteProjectFromGrid/{id}")
+    fun deleteProjectFromGrid(@PathVariable id: String): Unit {
+        projectService.deleteProjectFromGrid(id)
     }
 
 }

@@ -1,23 +1,40 @@
 package com.schooldevops.springboot.mongodbsamples.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinFeature
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.mongodb.BasicDBObject
+import com.mongodb.client.gridfs.model.GridFSFile
 import com.schooldevops.springboot.mongodbsamples.model.*
 import com.schooldevops.springboot.mongodbsamples.repository.ProjectRepository
 import com.schooldevops.springboot.mongodbsamples.repository.TaskRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.mongo.MongoConnectionDetails.GridFs
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.LookupOperation
 import org.springframework.data.mongodb.core.query.*
+import org.springframework.data.mongodb.gridfs.GridFsOperations
+import org.springframework.data.mongodb.gridfs.GridFsTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.io.BufferedReader
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
+import java.util.stream.Collectors
 
 @Service
 class ProjectServiceImpl(
     @Autowired val projectRepository: ProjectRepository,
     @Autowired val taskRepository: TaskRepository,
-    @Autowired val mongoTemplate: MongoTemplate
+    @Autowired val mongoTemplate: MongoTemplate,
+    @Autowired val gridFsTemplate: GridFsTemplate,
+    @Autowired val gridFsOperations: GridFsOperations
 ): ProjectService {
 
     override fun saveProject(p: Project) {
@@ -187,5 +204,53 @@ class ProjectServiceImpl(
     override fun saveProjectAndTask(p: Project, t: Task) {
         taskRepository.save(t)
         projectRepository.save(p)
+    }
+
+    override fun chunkAndSaveProject(p: Project) {
+        var s = serializetoJson(p)
+        val byteArrayInputStream = ByteArrayInputStream(s.toByteArray())
+        val basicDBObject = BasicDBObject()
+        basicDBObject.put("projectId", p.id)
+
+        gridFsTemplate.store(byteArrayInputStream, p.id, basicDBObject)
+    }
+
+    private fun serializetoJson(p: Project): String {
+        val objectMapper = ObjectMapper()
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(p)
+    }
+
+    private fun deserialize(json: String): Project {
+        val objectMapper = ObjectMapper().registerModule(
+            KotlinModule.Builder()
+                .withReflectionCacheSize(512)
+                .configure(KotlinFeature.NullToEmptyCollection, false)
+                .configure(KotlinFeature.NullToEmptyMap, false)
+                .configure(KotlinFeature.NullIsSameAsDefault, false)
+                .configure(KotlinFeature.SingletonSupport, false)
+                .configure(KotlinFeature.StrictNullChecks, false)
+                .build()
+        )
+
+        return objectMapper.readValue(json)
+    }
+
+    override fun loadProjectFromGrid(projectId: String): Project {
+        val file = gridFsTemplate.findOne(
+            Query(
+                Criteria.where("metadata.projectId").`is`(projectId)
+            ).with(Sort.by(Sort.Direction.DESC, "uploadDate")).limit(1))
+
+        val inputStream = gridFsOperations.getResource(file).getInputStream()
+        val stmlXml = BufferedReader(InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(
+            Collectors.joining("\n"))
+
+        val p = deserialize(stmlXml)
+
+        return p
+    }
+
+    override fun deleteProjectFromGrid(projectId: String) {
+        gridFsTemplate.delete(Query(Criteria.where("metadata.projectId").`is`(projectId)))
     }
 }

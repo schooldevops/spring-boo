@@ -96,3 +96,15 @@ GET http://localhost:8099/v1/projects/findNameDescriptionForMatchingAny?words=Pr
 
 ### @GetMapping("/projects/findNameDescriptionForMatchingPhrase")
 GET http://localhost:8099/v1/projects/findNameDescriptionForMatchingPhrase?pharase=Project A Descr
+
+### @PostMapping("/projects/saveProjectAndTask")
+POST http://localhost:8099/v1/projects/saveProjectAndTask
+
+### @PostMapping("/projects/saveToGrid")
+POST http://localhost:8099/v1/projects/saveToGrid
+
+### @GetMapping("/projects/loadFromGrid")
+GET http://localhost:8099/v1/projects/loadFromGrid
+
+### @DeleteMapping("/projects/deleteProjectFromGrid/{id}")
+DELETE http://localhost:8099/v1/projects/deleteProjectFromGrid/999999

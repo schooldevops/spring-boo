@@ -45,4 +45,10 @@ interface ProjectService {
 
     // Transactional
     fun saveProjectAndTask(p: Project, t: Task)
+
+    // GridFS
+    fun chunkAndSaveProject(p: Project)
+    fun loadProjectFromGrid(projectId: String): Project
+
+    fun deleteProjectFromGrid(projectId: String): Unit
 }
