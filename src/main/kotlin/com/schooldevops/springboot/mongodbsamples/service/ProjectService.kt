@@ -42,4 +42,7 @@ interface ProjectService {
     fun findNameDescriptionForMatchingTerm(term: String): List<Project>
     fun findNameDescriptionForMatchingAny(vararg words: String): List<Project>
     fun findNameDescriptionForMatchingPhrase(phrase: String): List<Project>
+
+    // Transactional
+    fun saveProjectAndTask(p: Project, t: Task)
 }

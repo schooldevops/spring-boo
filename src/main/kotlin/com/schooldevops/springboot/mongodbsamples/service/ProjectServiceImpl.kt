@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.LookupOperation
 import org.springframework.data.mongodb.core.query.*
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ProjectServiceImpl(
@@ -180,5 +181,11 @@ class ProjectServiceImpl(
         val query = TextQuery.queryText(TextCriteria.forDefaultLanguage().matchingPhrase(phrase))
             .sortByScore().with(Sort.by(Sort.Direction.DESC, "score"))
         return mongoTemplate.find(query, Project::class.java)
+    }
+
+    @Transactional
+    override fun saveProjectAndTask(p: Project, t: Task) {
+        taskRepository.save(t)
+        projectRepository.save(p)
     }
 }

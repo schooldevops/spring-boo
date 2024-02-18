@@ -157,4 +157,32 @@ class ProjectController(
     fun findNameDescriptionForMatchingPhrase(@RequestParam pharase: String): ResponseEntity<List<Project>>{
         return ResponseEntity.ok(projectService.findNameDescriptionForMatchingPhrase(pharase))
     }
+
+    @PostMapping("/projects/saveProjectAndTask")
+    fun saveProjectAndTask(): Unit {
+        var list = listOf("UK", "India");
+        val project = Project(
+            id = "999999",
+            code = "D",
+            countryList = list,
+            description = "ProjectDDecription",
+            startDate = "2020-01-01",
+            endDate = "2021-01-01",
+            estimatedCost = 5000,
+            name = "ProjectD",
+            score = 50.0f
+        )
+
+        val task = Task(
+            id = "999999",
+            cost = 3000,
+            description = "TaskDescription",
+            name = "TaskK",
+            ownername = "Tom",
+            projectId = "999999"
+        )
+
+        projectService.saveProjectAndTask(project, task)
+    }
+
 }
